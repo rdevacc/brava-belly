@@ -623,58 +623,104 @@ function initializeNavigation() {
     const navMenu = document.getElementById('navMenu');
     const navLinks = document.querySelectorAll('.nav-link');
     
-    // Scroll effect
+    // Scroll effect dengan auto-show di section
     let lastScroll = 0;
+    let ticking = false;
+    
     window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        
-        if (currentScroll > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const currentScroll = window.pageYOffset;
+                
+                // Add scrolled class
+                if (currentScroll > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                
+                // Check if near any section
+                let nearSection = false;
+                const sections = document.querySelectorAll('section[id]');
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    const threshold = 150; // Jarak untuk trigger navbar muncul
+                    
+                    // Jika scroll mendekati top section (dalam range threshold)
+                    if (currentScroll >= (sectionTop - threshold) && 
+                        currentScroll <= (sectionTop + threshold)) {
+                        nearSection = true;
+                    }
+                });
+                
+                // Logic: Hide on scroll down, Show on scroll up OR near section
+                if (currentScroll > lastScroll && currentScroll > 500 && !nearSection) {
+                    // Scrolling DOWN & not near section = HIDE
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    // Scrolling UP OR near section = SHOW
+                    navbar.style.transform = 'translateY(0)';
+                }
+                
+                lastScroll = currentScroll;
+                ticking = false;
+            });
+            
+            ticking = true;
         }
-        
-        // Hide navbar on scroll down, show on scroll up
-        if (currentScroll > lastScroll && currentScroll > 500) {
-            navbar.style.transform = 'translateY(-100%)';
-        } else {
-            navbar.style.transform = 'translateY(0)';
-        }
-        
-        lastScroll = currentScroll;
     });
+    
+    // Function to close menu
+    function closeMenu() {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        document.body.style.position = 'static';
+    }
+    
+    // Function to open menu
+    function openMenu() {
+        hamburger.classList.add('active');
+        navMenu.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+    }
     
     // Mobile menu toggle
-    hamburger.addEventListener('click', () => {
-        const isActive = navMenu.classList.toggle('active');
-        hamburger.classList.toggle('active');
+    hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
         
-        // Prevent background scroll
-        if (isActive) {
-            // Menu opened - disable scroll
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
+        if (navMenu.classList.contains('active')) {
+            closeMenu();
         } else {
-            // Menu closed - enable scroll
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
+            openMenu();
         }
     });
     
-    // Active link on scroll & click
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (navMenu.classList.contains('active') && 
+            !navMenu.contains(e.target) && 
+            !hamburger.contains(e.target)) {
+            closeMenu();
+        }
+    });
+    
+    // Active link on click
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             // Update active state
             navLinks.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
             
-            // Close mobile menu
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
+            // Show navbar when link clicked
+            navbar.style.transform = 'translateY(0)';
             
-            // FIX: Restore scroll when link clicked
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
+            // Close mobile menu
+            closeMenu();
         });
     });
     
@@ -694,11 +740,9 @@ function initializeNavigation() {
         });
     });
     
-    // Active section on scroll
+    // Active section highlighting on scroll
     const sections = document.querySelectorAll('section[id]');
     window.addEventListener('scroll', () => {
-        if (isScrolling) return;
-        
         const scrollY = window.pageYOffset;
         
         sections.forEach(section => {
@@ -724,6 +768,13 @@ function initializeNavigation() {
             document.querySelector('#about').scrollIntoView({ behavior: 'smooth' });
         });
     }
+    
+    // Close menu on ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+            closeMenu();
+        }
+    });
 }
 
 // ========== TESTIMONIALS SLIDER ==========
