@@ -235,7 +235,7 @@ const menuData = [
         name: 'Cheesecake New York',
         category: 'dessert',
         price: 35000,
-        image: 'https://images.unsplash.com/photo-1533134242820-ee3a6cbe3c8d?q=80&w=500',
+        image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?q=80&w=500',
         description: 'Cheesecake creamy khas New York dengan strawberry topping',
         rating: 4.9,
         badge: 'Premium'
