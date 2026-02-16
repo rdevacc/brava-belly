@@ -291,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeForms();
     initializeScrollEffects();
     initializeAnimations();
+    initializeBackToTop();
     
     // Show welcome notification
     setTimeout(() => {
@@ -335,7 +336,7 @@ function initializeMenu() {
                 'minuman': 'Minuman',
                 'dessert': 'Dessert'
             };
-            showNotification(`Menampilkan kategori: ${categoryNames[category]} (${filteredData.length} item)`, 'info');
+            // showNotification(`Menampilkan kategori: ${categoryNames[category]} (${filteredData.length} item)`, 'info');
         });
     });
 }
@@ -645,9 +646,19 @@ function initializeNavigation() {
     
     // Mobile menu toggle
     hamburger.addEventListener('click', () => {
+        const isActive = navMenu.classList.toggle('active');
         hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
-        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : 'auto';
+        
+        // Prevent background scroll
+        if (isActive) {
+            // Menu opened - disable scroll
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+        } else {
+            // Menu closed - enable scroll
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        }
     });
     
     // Active link on scroll & click
@@ -660,7 +671,10 @@ function initializeNavigation() {
             // Close mobile menu
             hamburger.classList.remove('active');
             navMenu.classList.remove('active');
-            document.body.style.overflow = 'auto';
+            
+            // FIX: Restore scroll when link clicked
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
         });
     });
     
@@ -1007,6 +1021,42 @@ function displayNextNotification() {
     }, duration);
 }
 
+// ========== BACK TO TOP BUTTON ==========
+function initializeBackToTop() {
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    // Show/hide button on scroll
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('show');
+        } else {
+            backToTopBtn.classList.remove('show');
+        }
+    });
+    
+    // Scroll to top on click
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        
+        // Optional: Show notification
+        showNotification('🚀 Kembali ke atas!', 'info', 1500);
+    });
+    
+    // Keyboard shortcut: Press "Home" key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Home') {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
+
 // ========== UTILITY FUNCTIONS ==========
 // Make functions globally accessible
 window.updateQuantity = updateQuantity;
@@ -1049,6 +1099,7 @@ if ('performance' in window) {
         }, 0);
     });
 }
+
 
 // Console art
 console.log(`

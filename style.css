@@ -199,7 +199,7 @@ button {
 .logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 6px;
     font-size: 28px;
     font-weight: 800;
     color: var(--text-primary);
@@ -319,6 +319,11 @@ button {
     cursor: pointer;
     background: transparent;
     padding: 8px;
+    position: relative;
+    width: 35px;
+    height: 35px;
+    justify-content: center;
+    align-items: center;
 }
 
 .hamburger span {
@@ -327,6 +332,23 @@ button {
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
     border-radius: 3px;
     transition: var(--transition);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+.hamburger span:nth-child(1) {
+    top: 8px;
+}
+
+.hamburger span:nth-child(2) {
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hamburger span:nth-child(3) {
+    bottom: 8px;
 }
 
 .hamburger:hover span {
@@ -334,16 +356,18 @@ button {
 }
 
 .hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(9px, 9px);
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .hamburger.active span:nth-child(2) {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translate(-50%, -50%) scale(0);
 }
 
 .hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(9px, -9px);
+    bottom: 50%;
+    transform: translate(-50%, 50%) rotate(-45deg);
 }
 
 /* ========== HERO SECTION ========== */
@@ -1488,6 +1512,59 @@ button {
     background-clip: text;
 }
 
+
+/* ========== BACK TO TOP BUTTON ========== */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100px);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 999;
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+}
+
+.back-to-top:active {
+    transform: translateY(-2px) scale(1.05);
+}
+
+.back-to-top i {
+    animation: bounceUpDown 2s infinite;
+}
+
+@keyframes bounceUpDown {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
 /* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 1200px) {
     .hero-title {
@@ -1599,6 +1676,14 @@ button {
 
     .testimonial-card {
         padding: 40px 30px;
+    }
+
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
     }
 }
 
