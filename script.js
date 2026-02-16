@@ -293,10 +293,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeAnimations();
     initializeBackToTop();
     
-    // Show welcome notification
-    setTimeout(() => {
-        showNotification('Selamat datang di Brava Belly! 🍽️', 'success');
-    }, 1000);
 });
 
 // ========== MENU FUNCTIONALITY ==========
@@ -336,7 +332,6 @@ function initializeMenu() {
                 'minuman': 'Minuman',
                 'dessert': 'Dessert'
             };
-            // showNotification(`Menampilkan kategori: ${categoryNames[category]} (${filteredData.length} item)`, 'info');
         });
     });
 }
@@ -491,7 +486,7 @@ function addToCart(item) {
         showNotification(`${item.name} ditambahkan! (${existingItem.quantity}x)`, 'success');
     } else {
         cart.push({ ...item, quantity: 1 });
-        showNotification(`✅ ${item.name} ditambahkan ke keranjang!`, 'success');
+        showNotification(`${item.name} ditambahkan ke keranjang!`, 'success');
     }
     
     updateCartUI();
@@ -581,7 +576,7 @@ function saveCart() {
 
 function checkout() {
     if (cart.length === 0) {
-        showNotification('❌ Keranjang Anda masih kosong!', 'error');
+        showNotification('Keranjang Anda masih kosong!', 'error');
         return;
     }
     
@@ -599,7 +594,7 @@ function checkout() {
     
     // Show confirmation
     showNotification(
-        `✅ Checkout berhasil!<br><br>Total: <strong>Rp ${formatPrice(total)}</strong><br>Item: ${totalItems} produk<br><br>Anda akan diarahkan ke WhatsApp...`, 
+        `Checkout berhasil!<br><br>Total: <strong>Rp ${formatPrice(total)}</strong><br>Item: ${totalItems} produk<br><br>Anda akan diarahkan ke WhatsApp...`, 
         'success', 
         3000
     );
@@ -855,7 +850,7 @@ function initializeForms() {
         const whatsappMessage = `Halo Brava Belly! 👋\n\n*Pesan dari Website:*\n\nNama: ${name}\nEmail: ${email}\nTelepon: ${phone}\n\nPesan:\n${message}`;
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
         
-        showNotification('📧 Pesan Anda telah terkirim! Kami akan segera menghubungi Anda.<br>Anda akan diarahkan ke WhatsApp...', 'success', 3000);
+        showNotification('Pesan Anda telah terkirim! Kami akan segera menghubungi Anda.<br>Anda akan diarahkan ke WhatsApp...', 'success', 3000);
         
         setTimeout(() => {
             window.open(whatsappUrl, '_blank');
@@ -869,7 +864,7 @@ function initializeForms() {
             e.preventDefault();
             const email = form.querySelector('input[type="email"]').value;
             
-            showNotification(`✅ Terima kasih telah berlangganan!<br>Email <strong>${email}</strong> telah terdaftar untuk newsletter kami.`, 'success');
+            showNotification(`Terima kasih telah berlangganan!<br>Email <strong>${email}</strong> telah terdaftar untuk newsletter kami.`, 'success');
             form.reset();
         });
     });
@@ -1091,9 +1086,6 @@ function initializeBackToTop() {
             top: 0,
             behavior: 'smooth'
         });
-        
-        // Optional: Show notification
-        showNotification('🚀 Kembali ke atas!', 'info', 1500);
     });
     
     // Keyboard shortcut: Press "Home" key
@@ -1122,7 +1114,7 @@ window.addEventListener('load', () => {
 document.addEventListener('contextmenu', (e) => {
     if (e.target.tagName === 'IMG') {
         e.preventDefault();
-        showNotification('Gambar dilindungi 🔒', 'warning', 2000);
+        showNotification('Gambar dilindungi', 'warning', 2000);
     }
 });
 
@@ -1135,7 +1127,7 @@ document.addEventListener('keydown', (e) => {
     konamiCode = konamiCode.slice(-10);
     
     if (konamiCode.join(',') === konamiSequence.join(',')) {
-        showNotification('🎉 Selamat! Anda menemukan Easter Egg! Kode promo: BRAVABELLY50 untuk diskon 50%!', 'success', 8000);
+        showNotification('Selamat! Anda menemukan Easter Egg! Kode promo: BRAVABELLY50 untuk diskon 50%!', 'success', 8000);
         konamiCode = [];
     }
 });
