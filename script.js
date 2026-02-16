@@ -633,7 +633,7 @@ function initializeNavigation() {
                 const currentScroll = window.pageYOffset;
                 
                 // Add scrolled class
-                if (currentScroll > 100) {
+                if (currentScroll > 50) {
                     navbar.classList.add('scrolled');
                 } else {
                     navbar.classList.remove('scrolled');
